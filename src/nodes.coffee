@@ -1745,6 +1745,15 @@ exports.Code = class Code extends Base
       boundfunc.updateLocationDataIfMissing @locationData
       return boundfunc.compileNode(o)
 
+    # Wrap async function body as a callback of a new Promise object.
+    if @isAsync
+      @isAsync = false
+      callback = new Code [], @body
+      promise = new Call (new Literal 'Promise'), [callback]
+      promise.newInstance()
+      promise.updateLocationDataIfMissing @locationData
+      @body = new Block [promise]
+
     o.scope         = del(o, 'classScope') or @makeScope o.scope
     o.scope.shared  = del(o, 'sharedScope') or @icedgen
     o.scope.icedgen = @icedgen
