@@ -29,8 +29,9 @@ test "async functions wrap the body inside promise", ->
   ok foo(3) instanceof Promise
   eq foo(3).then((x) -> x), 6
 
-test "async functions wrap the body inside promise", ->
-  foo = (x) async -> x + 3
+test "async functions works on bound function as well", ->
+  Foo = (y) ->
+    @y = y
+    return ((x) async => x + @y + 3)
 
-  ok foo(3) instanceof Promise
-  eq foo(3).then((x) -> x), 6
+  eq (Foo(2))(3).then((x) -> x), 8
