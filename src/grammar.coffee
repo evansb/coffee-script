@@ -193,9 +193,9 @@ grammar =
   # list.
   Code: [
     o 'PARAM_START ParamList PARAM_END OptAsync FuncGlyph Block',
-                                                -> new Code $2, $6, $5
-    o 'ASYNC FuncGlyph Block',                  -> new Code [], $3, $2
-    o 'FuncGlyph Block',                        -> new Code [], $2, $1
+                                                -> new Code $2, $6, $5, $4
+    o 'ASYNC FuncGlyph Block',                  -> new Code [], $3, $2, true
+    o 'FuncGlyph Block',                        -> new Code [], $2, $1, false
   ]
 
   OptAsync: [
