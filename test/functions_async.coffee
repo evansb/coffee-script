@@ -35,3 +35,7 @@ test "async functions works on bound function as well", ->
     return ((x) async => x + @y + 3)
 
   eq (Foo(2))(3).then((x) -> x), 8
+
+test "nested async functions", ->
+  foo = (x) async -> (y) async -> x + y
+  eq (foo(3).then((y) -> y(4).then((x) -> x))), 7
