@@ -404,7 +404,13 @@ exports.Lexer = class Lexer
   literalToken: ->
     if match = OPERATOR.exec @chunk
       [value] = match
-      @tagParameters() if CODE.test value
+      if CODE.test value
+        if @tag() is 'ASYNC'
+          temp = @tokens.pop()
+          @tagParameters()
+          @tokens.push temp
+        else
+          @tagParameters()
     else
       value = @chunk.charAt 0
     tag  = value
@@ -742,7 +748,7 @@ JS_KEYWORDS = [
 COFFEE_KEYWORDS = ['undefined', 'then', 'unless', 'until', 'loop', 'of', 'by', 'when'] 
 
 # iced additions
-COFFEE_KEYWORDS = COFFEE_KEYWORDS.concat [ 'await', 'defer' ]
+COFFEE_KEYWORDS = COFFEE_KEYWORDS.concat [ 'await', 'defer', 'async' ]
 
 COFFEE_ALIAS_MAP =
   and  : '&&'
